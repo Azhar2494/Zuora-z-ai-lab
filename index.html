@@ -1,21 +1,10 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Z-AI Lab - Zuora AI Advanced Demo</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { color: #2c3e50; }
-        h2 { color: #34495e; margin-top: 30px; }
-        button { margin-top: 10px; padding: 8px 16px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #3498db; }
-        #kpi-metrics { margin-top: 10px; }
-        section { background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input[type=text] { padding: 6px; font-size: 1rem; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        #copilot-response { margin-top: 10px; font-style: italic; background: #eef3f7; padding: 10px; border-radius: 6px; min-height: 40px;}
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Z-AI Lab - Zuora AI Demo</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <header>
@@ -23,151 +12,54 @@
         <p>Enterprise-grade subscription AI platform mapped to Zuora products</p>
     </header>
     <main>
-        <section id='dashboard'>
+        <section id="dashboard">
             <h2>Executive Dashboard</h2>
-            <div id='kpi-metrics'>Click "Load Sample Data" to begin.</div>
-            <button onclick='loadSampleData()'>Load Sample Data</button>
+            <div id="kpi-metrics">Click "Load Sample Data" to begin.</div>
+            <button onclick="loadSampleData()">Load Sample Data</button>
         </section>
-        <section id='billing-ai'>
+        <section id="billing-ai">
             <h2>Billing AI</h2>
-            <button onclick='simulateBillingRetry()'>Simulate Smart Retry</button>
-            <div id='billing-results'></div>
+            <button onclick="simulateBillingRetry()">Simulate Smart Retry</button>
+            <div id="billing-results"></div>
         </section>
-        <section id='revenue-ai'>
+        <section id="revenue-ai">
             <h2>Revenue AI</h2>
-            <button onclick='runRevenueScenario()'>Run ASC 606 Scenario</button>
-            <div id='revenue-results'></div>
+            <button onclick="runRevenueScenario()">Run ASC 606 Scenario</button>
+            <div id="revenue-results"></div>
         </section>
-        <section id='cpq-ai'>
+        <section id="cpq-ai">
             <h2>CPQ AI</h2>
-            <button onclick='generateQuote()'>Generate Quote</button>
-            <div id='cpq-results'></div>
+            <button onclick="generateQuote()">Generate Quote</button>
+            <div id="cpq-results"></div>
         </section>
-        <section id='collections-ai'>
+        <section id="collections-ai">
             <h2>Collections AI</h2>
-            <button onclick='predictCollectionsRisk()'>Predict Risk & DSO</button>
-            <div id='collections-results'></div>
+            <button onclick="predictCollectionsRisk()">Predict Risk & DSO</button>
+            <div id="collections-results"></div>
         </section>
-        <section id='zephr-ai'>
+        <section id="zephr-ai">
             <h2>Zephr AI Paywall</h2>
-            <button onclick='optimizePaywall()'>Run Paywall Optimization</button>
-            <div id='zephr-results'></div>
+            <button onclick="optimizePaywall()">Run Paywall Optimization</button>
+            <div id="zephr-results"></div>
         </section>
-        <section id='forecasting-ai'>
+        <section id="forecasting-ai">
             <h2>Forecasting AI</h2>
-            <button onclick='runForecasting()'>Run Revenue Forecast</button>
-            <div id='forecasting-results'></div>
+            <button onclick="runForecasting()">Run Revenue Forecast</button>
+            <div id="forecasting-results"></div>
         </section>
-        <section id='aicopilot-ai'>
+        <section id="aicopilot-ai">
             <h2>AI Copilot</h2>
-            <input type='text' id='copilot-query' placeholder='Ask me anything about subscriptions...' style='width: 60%;'>
-            <button onclick='askCopilot()'>Ask</button>
-            <div id='copilot-response'></div>
+            <input
+                type="text"
+                id="copilot-query"
+                placeholder="Ask me anything about subscriptions..."
+                style="width: 60%;"
+            />
+            <button onclick="askCopilot()">Ask</button>
+            <div id="copilot-response"></div>
         </section>
     </main>
 
-    <script>
-        // Sample data variable
-        let sampleData = null;
-
-        // Load sample data and show KPIs
-        function loadSampleData() {
-            sampleData = getSampleData();
-            displayKpiMetrics();
-            clearResults();
-        }
-
-        function clearResults() {
-            document.getElementById('billing-results').innerHTML = '';
-            document.getElementById('revenue-results').innerHTML = '';
-            document.getElementById('cpq-results').innerHTML = '';
-            document.getElementById('collections-results').innerHTML = '';
-            document.getElementById('zephr-results').innerHTML = '';
-            document.getElementById('forecasting-results').innerHTML = '';
-            document.getElementById('copilot-response').innerHTML = '';
-        }
-
-        function displayKpiMetrics() {
-            const kpiDiv = document.getElementById('kpi-metrics');
-            if (!sampleData) return;
-            kpiDiv.innerHTML = `
-                <p><strong>Total Customers:</strong> ${sampleData.customers.length}</p>
-                <p><strong>Monthly Recurring Revenue (MRR):</strong> $${sampleData.mrr.toLocaleString()}</p>
-                <p><strong>Annual Recurring Revenue (ARR):</strong> $${sampleData.arr.toLocaleString()}</p>
-                <p><strong>Churn Rate:</strong> ${sampleData.churnRate}%</p>
-            `;
-        }
-
-        // Billing AI: Simulate Smart Retry success
-        function simulateBillingRetry() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let successRate = 87; // % success simulated
-            document.getElementById('billing-results').innerHTML = `Smart Retry payment success rate: ${successRate}%`;
-        }
-
-        // Revenue AI: Run ASC 606 scenario
-        function runRevenueScenario() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let totalRecognized = sampleData.revenueRecognition.reduce((a,b) => a+b, 0);
-            document.getElementById('revenue-results').innerHTML = `Total recognized revenue: $${totalRecognized.toLocaleString()}`;
-        }
-
-        // CPQ AI: Generate quote simulation
-        function generateQuote() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let basePrice = 5000;
-            let upsell = 1200;
-            let quote = basePrice + upsell;
-            document.getElementById('cpq-results').innerHTML = `Generated quote amount: $${quote}`;
-        }
-
-        // Collections AI: Predict Risk & DSO
-        function predictCollectionsRisk() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let riskLevel = 'Medium';
-            let dso = 28.4;
-            document.getElementById('collections-results').innerHTML = `Collections risk: ${riskLevel}, Days Sales Outstanding (DSO): ${dso}`;
-        }
-
-        // Zephr AI: Run Paywall Optimization
-        function optimizePaywall() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let conversionRate = 28.3;
-            document.getElementById('zephr-results').innerHTML = `Optimized conversion rate: ${conversionRate}%`;
-        }
-
-        // Forecasting AI: Run Revenue Forecast
-        function runForecasting() {
-            if (!sampleData) return alert('Please load sample data first!');
-            let forecast = sampleData.forecast[0];
-            document.getElementById('forecasting-results').innerHTML = `Forecast for next quarter: $${forecast.toLocaleString()}`;
-        }
-
-        // AI Copilot: Basic Q&A simulation
-        function askCopilot() {
-            const query = document.getElementById('copilot-query').value.toLowerCase();
-            const responseDiv = document.getElementById('copilot-response');
-            if (!sampleData) return alert('Please load sample data first!');
-            if (query.includes('churn')) {
-                responseDiv.innerHTML = `Current churn rate is ${sampleData.churnRate}%. Proactive retention actions recommended.`;
-            } else if (query.includes('mrr')) {
-                responseDiv.innerHTML = `MRR currently stands at $${sampleData.mrr.toLocaleString()}.`;
-            } else {
-                responseDiv.innerHTML = "I'm here to assist you with subscription analytics. Try asking about churn or MRR.";
-            }
-        }
-
-        // Sample data generation function
-        function getSampleData() {
-            return {
-                customers: Array(200).fill().map((_, i) => ({ id: i + 1, name: `Customer ${i + 1}`, healthScore: Math.floor(Math.random() * 100) })),
-                mrr: 2760000,
-                arr: 33000000,
-                churnRate: 7.3,
-                revenueRecognition: [500000, 750000, 850000, 650000, 1000000],
-                forecast: [8400000, 8700000, 9000000],
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
